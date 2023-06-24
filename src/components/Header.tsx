@@ -6,6 +6,7 @@ import { logout } from '../redux/currentUserSlice';
 import { RootState } from '../redux/store';
 
 const Container = styled.div`
+    box-sizing: border-box;
     width: 100%;
     height: 3.5rem;
     position: fixed;
@@ -25,6 +26,7 @@ const Box = styled.div`
     justify-content: flex-end;
     padding: 0 0.5rem;
     border-bottom: 1px solid #b0b2ab;
+    background-color: #000;
 `;
 
 const LogoutButton = styled.div`

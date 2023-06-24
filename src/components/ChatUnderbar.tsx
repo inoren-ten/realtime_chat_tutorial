@@ -75,7 +75,7 @@ function ChatUnderbar(props: any) {
           type='text'
           value={input}
           onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setInput(e.target.value)}
-        /> 
+        />
       </InputBox>
       {input === '' ? (
         <UnSubmitButton>Go</UnSubmitButton>
