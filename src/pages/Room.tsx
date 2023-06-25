@@ -17,6 +17,7 @@ const ChatContainer = styled.div`
     flex-direction: column-reverse;
     align-items: center;
     justify-content: flex-start;
+    overflow-y: auto;
 `;
 
 function Room() {
@@ -25,13 +26,12 @@ function Room() {
   const rid: any = id;
   const roomId: number = parseInt(rid, 10);
   const status = useSelector((state: RootState) => state.chats.status);
-  // const chats = useSelector((state: RootState) => {
-  //   const allChats = selectAllChats(state)
-  //   return allChats.filter((chat) => {
-  //     return chat.room_id === roomId;
-  //   })
-  // });
-  const chats = useSelector(selectAllChats);
+  const chats = useSelector((state: RootState) => {
+    const allChats = selectAllChats(state)
+    return allChats.filter((chat) => {
+      return chat.room_id === roomId;
+    })
+  });
   const currentUser: any = useSelector((state: RootState) => state.currentUser);
   const cable = useMemo(() => ActionCable.createConsumer('ws://localhost:5000/cable'), []);
 
@@ -40,7 +40,7 @@ function Room() {
   }, []);
 
   useEffect(() => {
-    const sub = cable.subscriptions.create({channel: "ChatChannel"}, {
+    const sub = cable.subscriptions.create({channel: "ChatChannel", room: roomId}, {
       received(msg) {
         console.log(msg)
         dispatch(createChat(msg))

@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { AllBox, AllContainer } from '../styles/Container'
+import { AllBox, AllContainer } from '../styles/Container';
 import { rails } from '../App';
-import { currentuserKey, key } from '../key';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentUser } from '../redux/currentUserSlice';
-import { RootState } from '../redux/store';
 
 const Title = styled.div`
     width: 100%;
@@ -66,31 +62,25 @@ const UnSubmitButton = styled(SubmitButton)`
     opacity: 0.5;
 `;
 
-function Home() {
-    const dispatch = useDispatch();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleSend = () => {
-        const newData = {name: name, email: email, password: password}
-        console.log(newData)
-        rails.post('users/create', newData)
+function Otp() {
+    const [email, setEmail] = useState('');
+
+    const handleSubmit = () => {
+        const newData = {email: email}
+        rails.post('users/otp', newData)
         .then(resp => {
-            localStorage.setItem(key, resp.data.jwt)
-            localStorage.setItem(currentuserKey, JSON.stringify(resp.data.user))
-            dispatch(setCurrentUser(resp.data.user))
+            console.log(resp.data)
         })
         .catch(e => {
             console.log(e)
-            console.log(e.response.data)
         })
     };
 
     return (
         <AllContainer>
             <AllBox>
-                <Title>ユーザー<span>登録</span></Title>
+                <Title>メールアドレス</Title>
                 <InputBox>
                     <Text>・メールアドレス</Text>
                     <Input
@@ -99,22 +89,14 @@ function Home() {
                         onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)}
                     />
                 </InputBox>
-                <InputBox>
-                    <Text>・パスワード</Text>
-                    <Input
-                        type='password'
-                        value={password}
-                        onChange={(e: {target: {value: React.SetStateAction<string>;};}) => setPassword(e.target.value)}
-                    />
-                </InputBox>
-                {(email === '' || name === '' || password === '') ? (
-                    <UnSubmitButton>完了</UnSubmitButton>
+                {email === '' ? (
+                    <UnSubmitButton>登録</UnSubmitButton>
                 ) : (
-                    <SubmitButton onClick={handleSend}>完了</SubmitButton>
+                    <SubmitButton onClick={handleSubmit}>登録</SubmitButton>
                 )}
             </AllBox>
         </AllContainer>
     )
 }
 
-export default Home
+export default Otp
